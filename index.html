@@ -9,12 +9,6 @@
 </head>
 <body>
 
-  <!-- Live clock -->
-  <div class="clock-wrap">
-    <div class="clock-time" id="clockTime">--:--</div>
-    <div class="clock-date" id="clockDate">---</div>
-  </div>
-
   <!-- Passcode card -->
   <main class="lock-screen">
     <div class="lock-card">
@@ -67,21 +61,6 @@
 
   <script src="script.js"></script>
   <script>
-    // ── Live clock ──
-    const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
-    function updateClock() {
-      const now = new Date();
-      const h   = now.getHours();
-      const m   = now.getMinutes().toString().padStart(2, '0');
-      document.getElementById('clockTime').textContent = `${((h % 12) || 12)}:${m}`;
-      document.getElementById('clockDate').textContent =
-        `${DAYS[now.getDay()]}, ${MONTHS[now.getMonth()]} ${now.getDate()}`;
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
-
     // ── Touch ID → auto-enter ──
     document.getElementById('touchIdBtn').addEventListener('click', () => {
       document.getElementById('touchIdBtn').classList.add('scanning');
