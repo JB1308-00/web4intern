@@ -39,7 +39,7 @@ function handleKey(value) {
   if (enteredCode.length === maxDigits) {
     setTimeout(() => {
       if (enteredCode === correctCode) {
-        window.location.href = 'blank.html';
+        window.location.replace('blank.html');
       } else {
         resetCode('Incorrect passcode');
       }
