@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lock Screen</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Live clock -->
+  <div class="clock-wrap">
+    <div class="clock-time" id="clockTime">--:--</div>
+    <div class="clock-date" id="clockDate">---</div>
+  </div>
+
+  <!-- Passcode card -->
+  <main class="lock-screen">
+    <div class="lock-card">
+      <div class="lock-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <div class="lock-title">Enter Passcode</div>
+      <div class="passcode-dots" id="passcodeDots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="keypad" id="keypad">
+        <button class="key">1</button>
+        <button class="key">2</button>
+        <button class="key">3</button>
+        <button class="key">4</button>
+        <button class="key">5</button>
+        <button class="key">6</button>
+        <button class="key">7</button>
+        <button class="key">8</button>
+        <button class="key">9</button>
+        <div class="key empty"></div>
+        <button class="key">0</button>
+        <button class="key action" id="eraseKey">⌫</button>
+      </div>
+      <div class="status" id="statusText"></div>
+    </div>
+  </main>
+
+  <!-- Touch ID -->
+  <div class="touch-id-wrap">
+    <button class="touch-id-btn" id="touchIdBtn" title="Use Touch ID">
+      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <path d="M22 13c2.6-1.6 5.7-2.5 9-2.5C40.6 10.5 50 19.9 50 31.5c0 7-3.5 13.2-8.8 17"/>
+        <path d="M10 43C9 40.4 8.5 37.5 8.5 34.5c0-5.2 1.8-10 4.8-13.8"/>
+        <path d="M32 19.5c7.2 0 13 5.8 13 13 0 3.3-1.2 6.3-3.2 8.6"/>
+        <path d="M19.5 47.5C17.5 44.5 16.5 40.8 16.5 36.5c0-8.6 6.9-15.5 15.5-15.5"/>
+        <path d="M32 27.5c2.8 0 5 2.2 5 5v11"/>
+        <path d="M27 32.5c0-2.8 2.2-5 5-5"/>
+        <path d="M27 32.5v11c0 2.8 1.6 5.2 4 6.4"/>
+      </svg>
+    </button>
+    <span class="touch-id-label">Touch ID</span>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // ── Live clock ──
+    const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+    function updateClock() {
+      const now = new Date();
+      const h   = now.getHours();
+      const m   = now.getMinutes().toString().padStart(2, '0');
+      document.getElementById('clockTime').textContent = `${((h % 12) || 12)}:${m}`;
+      document.getElementById('clockDate').textContent =
+        `${DAYS[now.getDay()]}, ${MONTHS[now.getMonth()]} ${now.getDate()}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // ── Touch ID → auto-enter ──
+    document.getElementById('touchIdBtn').addEventListener('click', () => {
+      document.getElementById('touchIdBtn').classList.add('scanning');
+      setTimeout(() => {
+        document.getElementById('touchIdBtn').classList.remove('scanning');
+        autoEnterCode();
+      }, 600);
+    });
+
+    // ── Shake dots on wrong passcode ──
+    const observer = new MutationObserver(() => {
+      const st = document.getElementById('statusText');
+      if (st.classList.contains('error') && st.textContent) {
+        const dots = document.getElementById('passcodeDots');
+        dots.classList.remove('shake');
+        void dots.offsetWidth; // reflow to restart animation
+        dots.classList.add('shake');
+      }
+    });
+    observer.observe(document.getElementById('statusText'), { attributes: true, characterData: true, childList: true, subtree: true });
+  </script>
+</body>
+</html>
