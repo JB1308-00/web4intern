@@ -14,94 +14,6 @@
             font-family: Arial, sans-serif;
         }
 
-        /* ── Mailing list modal ── */
-        .mail-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.45);
-            backdrop-filter: blur(5px);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .mail-modal {
-            background: rgba(255,255,255,0.78);
-            border: 1px solid rgba(255,255,255,0.55);
-            border-radius: 28px;
-            backdrop-filter: blur(28px);
-            box-shadow: 0 32px 80px rgba(0,0,0,0.22);
-            padding: 44px 38px 34px;
-            max-width: 420px;
-            width: 90vw;
-            position: relative;
-            text-align: center;
-        }
-        .mail-modal-close {
-            position: absolute;
-            top: 14px;
-            right: 18px;
-            background: none;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            color: #777;
-            line-height: 1;
-            padding: 4px;
-        }
-        .mail-modal h2 {
-            margin: 0 0 10px;
-            font-size: 1.5rem;
-            color: #111;
-        }
-        .mail-modal p {
-            margin: 0 0 22px;
-            color: #555;
-            font-size: 0.95rem;
-            line-height: 1.55;
-        }
-        .mail-modal input[type="email"] {
-            width: 100%;
-            padding: 13px 16px;
-            border-radius: 16px;
-            border: 1.5px solid rgba(46,56,72,0.15);
-            background: rgba(255,255,255,0.9);
-            font-size: 0.95rem;
-            outline: none;
-            margin-bottom: 12px;
-            transition: border-color 0.2s;
-        }
-        .mail-modal input[type="email"]:focus { border-color: #1d72ff; }
-        .mail-modal .subscribe-btn {
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 16px;
-            background: #1d72ff;
-            color: #fff;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.15s;
-        }
-        .mail-modal .subscribe-btn:hover { background: #1665d8; transform: translateY(-1px); }
-        .mail-modal .subscribe-btn:active { transform: translateY(0); }
-        .mail-success {
-            display: none;
-            color: #28a745;
-            font-weight: 700;
-            margin-top: 14px;
-            font-size: 0.95rem;
-        }
-        .mail-modal .skip-link {
-            display: block;
-            margin-top: 16px;
-            color: #999;
-            font-size: 0.85rem;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
         /* ── Header ── */
         .header {
             position: fixed;
@@ -668,18 +580,6 @@
 <body>
 
 <!-- ── Mailing List Modal (shown on page load) ── -->
-<div class="mail-overlay" id="mailOverlay">
-    <div class="mail-modal">
-        <button class="mail-modal-close" id="mailModalClose">✕</button>
-        <h2>Join Our Mailing List</h2>
-        <p>Get exclusive offers, new arrivals, and updates delivered straight to your inbox. No spam, ever.</p>
-        <input type="email" id="mailModalEmail" placeholder="Enter your email address">
-        <button class="subscribe-btn" id="mailModalSubscribe">Subscribe Now</button>
-        <div class="mail-success" id="mailSuccess"></div>
-        <span class="skip-link" id="mailModalSkip">No thanks, maybe later</span>
-    </div>
-</div>
-
 <!-- ── Header ── -->
 <div class="header">
     <img src="images/headerlogo.png" alt="Logo" class="logo">
@@ -834,33 +734,6 @@
     if (performance.getEntriesByType('navigation')[0]?.type === 'reload') {
         window.location.replace('index.html');
     }
-
-    // ── Mailing list modal ──
-    const mailOverlay = document.getElementById('mailOverlay');
-
-    function closeMailModal() { mailOverlay.style.display = 'none'; }
-
-    document.getElementById('mailModalClose').addEventListener('click', closeMailModal);
-    document.getElementById('mailModalSkip').addEventListener('click', closeMailModal);
-
-    document.getElementById('mailModalSubscribe').addEventListener('click', () => {
-        const emailInput = document.getElementById('mailModalEmail');
-        const email = emailInput.value.trim();
-        const valid = email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-        if (!valid) {
-            emailInput.style.borderColor = '#ff3b30';
-            emailInput.focus();
-            return;
-        }
-        emailInput.style.borderColor = '';
-
-        const success = document.getElementById('mailSuccess');
-        success.style.display = 'block';
-        success.textContent = `You're in! We'll be in touch at ${email}.`;
-        document.getElementById('mailModalSubscribe').disabled = true;
-        setTimeout(closeMailModal, 2200);
-    });
 
     // ── Carousels ──
     document.querySelectorAll('.carousel').forEach(carousel => {
