@@ -730,11 +730,6 @@
 </div>
 
 <script>
-    // ── Redirect to index.html on refresh ──
-    if (performance.getEntriesByType('navigation')[0]?.type === 'reload') {
-        window.location.replace('index.html');
-    }
-
     // ── Carousels ──
     document.querySelectorAll('.carousel').forEach(carousel => {
         let idx = 0;
